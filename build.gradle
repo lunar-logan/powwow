@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+}
+
+sourceCompatibility = "14"
+targetCompatibility = "14"
+group 'io.powwow'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // Testing related
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    compile 'com.github.ben-manes.caffeine:caffeine:2.8.5'
+//    compile group: 'net.java.dev.javacc', name: 'javacc', version: '7.0.9'
+
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.3.3.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.3.3.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '2.3.3.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.3.3.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.3.2.RELEASE'
+
+    // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.5.Final'
+
+    compile 'net.aholbrook.paseto:meta:0.5.0'
+
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
+}
