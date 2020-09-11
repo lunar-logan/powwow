@@ -8,3 +8,17 @@ spring:
       ddl-auto: validate
     database: postgresql
     show-sql: true
+
+management:
+  metrics:
+    export:
+      prometheus:
+        pushgateway:
+          enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    prometheus:
+      enabled: true

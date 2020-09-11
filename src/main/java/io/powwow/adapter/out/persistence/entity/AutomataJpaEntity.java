@@ -31,16 +31,16 @@ public class AutomataJpaEntity implements Serializable {
     @Column(name = "VERSION")
     private Long version;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "automata")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "automata")
     private List<EventJpaEntity> events;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "automata")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "automata")
     private List<StateJpaEntity> states;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "automata")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "automata")
     private List<AutomataStatusJpaEntity> statuses;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "automata")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "automata")
     private List<TaskDefinitionJpaEntity> taskDefinitions;
 
     @Column(name = "CREATED")
