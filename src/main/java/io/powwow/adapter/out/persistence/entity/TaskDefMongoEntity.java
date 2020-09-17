@@ -1,10 +1,11 @@
-package io.powwow.domain;
+package io.powwow.adapter.out.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -12,13 +13,11 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskDefinition {
-    private Long id;
+public class TaskDefMongoEntity implements Serializable {
     private String name;
     private String queueName;
     private Map<String, Object> inputParameters;
-    private List<TaskStatus> statuses;
-    private Map<TaskStatus, List<Event>> eventMap;
+    private Map<String, List<String>> statusEventMap;
     private String retryPolicy;
     private int maxRetries;
 }

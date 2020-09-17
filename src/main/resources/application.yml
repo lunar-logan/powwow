@@ -1,13 +1,3 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/powwow
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: validate
-    database: postgresql
-    show-sql: true
 
 management:
   metrics:
@@ -22,3 +12,7 @@ management:
   endpoint:
     prometheus:
       enabled: true
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost/powwow

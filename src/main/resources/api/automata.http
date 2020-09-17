@@ -1,0 +1,109 @@
+POST localhost:8080/fsm/
+Content-Type: application/json
+
+{
+  "stateMachineDef": {
+    "id": "ShippingWorkflowV1",
+    "name": "Order Fulfillment Workflow",
+    "description": "Definition of complete shipping lifecycle",
+    "acceptingStates": [
+      "delivered"
+    ],
+    "startingStates": [
+      "init"
+    ],
+    "transitions": [
+      {
+        "fromState": "init",
+        "toState": "created",
+        "event": "auto",
+        "tasks": [
+          "CreateWarehouseShipmentTask",
+          "CreateCourierShipmentTask"
+        ]
+      },
+      {
+        "fromState": "created",
+        "toState": "packed",
+        "event": "onPacked",
+        "tasks": [
+          "NotifyUserTask"
+        ]
+      },
+      {
+        "fromState": "packed",
+        "toState": "shipped",
+        "event": "onShipped",
+        "tasks": [
+          "NotifyUserTask"
+        ]
+      },
+      {
+        "fromState": "shipped",
+        "toState": "delivered",
+        "event": "onDelivered",
+        "tasks": [
+          "NotifyUserTask"
+        ]
+      }
+    ],
+    "tasks": [
+      {
+        "name": "CreateWarehouseShipmentTask",
+        "queueName": "wmsQueue",
+        "eventMap": {
+          "COMPLETED": ["auto"]
+        }
+      },
+      {
+        "name": "CreateCourierShipmentTask",
+        "queueName": "uciQueue",
+        "eventMap": {
+          "COMPLETED": ["auto"]
+        }
+      },
+      {
+        "name": "NotifyUserTask",
+        "queueName": "umsQueue",
+        "eventMap": {
+          "COMPLETED": ["auto"]
+        }
+      }
+    ],
+    "createdBy": "anurag.gautam@snapdeal.com"
+  }
+}
+
+###
+GET localhost:8080/fsm/5f62177bf5be930783891f3b
+
+###
+
+GET localhost:8080/fsm?name=Cancellation Workflow&name=Cancellation Workflow
+
+###
+POST localhost:8080/task/
+Content-Type: application/json
+
+{
+  "name": "CreatWarehouseOrder",
+  "queueName": "shipping_queue",
+  "inputParameters": {
+    "expectedDeliveryDate": "${root.order.edd}"
+  }
+}
+
+###
+POST localhost:8080/task/
+Content-Type: application/json
+
+{
+  "name": "CancelWarehouseOrder",
+  "queueName": "shipping_queue",
+  "inputParameters": {
+    "expectedDeliveryDate": "${root.order.edd}"
+  }
+}
+
+###
+GET localhost:8080/task/CreatWarehouseOrder
