@@ -9,10 +9,7 @@ import io.powwow.application.DefinitionService;
 import io.powwow.application.ValidationService;
 import io.powwow.application.dto.ValidationDTO;
 import io.powwow.application.response.ServiceResponse;
-import io.powwow.model.StateMachineDef;
-import io.powwow.model.TaskDef;
-import io.powwow.model.TaskStatus;
-import io.powwow.model.Transition;
+import io.powwow.model.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,7 +61,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .fromState(transitionMongoEntity.getFromState())
                 .toState(transitionMongoEntity.getToState())
                 .event(transitionMongoEntity.getEvent())
-                .tasks(transitionMongoEntity.getTasks())
+                .task(transitionMongoEntity.getTask())
                 .build();
     }
 
@@ -111,7 +108,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .fromState(transition.getFromState())
                 .toState(transition.getToState())
                 .event(transition.getEvent())
-                .tasks(transition.getTasks())
+                .task(transition.getTask())
                 .build();
     }
 
@@ -123,7 +120,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .inputParameters(taskDefMongoEntity.getInputParameters())
                 .eventMap(toDomainEventMap(taskDefMongoEntity.getStatusEventMap()))
                 .maxRetries(taskDefMongoEntity.getMaxRetries())
-                .retryPolicy(taskDefMongoEntity.getRetryPolicy())
+                .retryPolicy(RetryPolicy.valueOf(taskDefMongoEntity.getRetryPolicy()))
                 .build();
     }
 
@@ -141,7 +138,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .inputParameters(taskDef.getInputParameters())
                 .statusEventMap(toSerializableEventMap(taskDef.getEventMap()))
                 .maxRetries(taskDef.getMaxRetries())
-                .retryPolicy(taskDef.getRetryPolicy())
+                .retryPolicy(taskDef.getRetryPolicy().name())
                 .build();
     }
 

@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -20,19 +19,20 @@ import java.util.Map;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TaskDef implements Serializable {
-    @NotBlank
+    @NotBlank(message = "Task name cannot be null or blank")
     private String name;
 
     private String queueName;
 
     private Map<String, Object> inputParameters;
 
-    @NotNull
-    @NotEmpty
-    private Map<TaskStatus, @NotEmpty @NotNull List<String>> eventMap;
+    @NotEmpty(message = "Event map must not be null or empty")
+    private Map<TaskStatus, List<String>> eventMap;
 
-    private String retryPolicy;
+    @Builder.Default
+    private RetryPolicy retryPolicy = RetryPolicy.FIXED_DELAY;
 
-    @Min(1)
+    @Min(value = 1, message = "maxRetries must be greater than or equal to 1")
+    @Builder.Default
     private int maxRetries = 3;
 }

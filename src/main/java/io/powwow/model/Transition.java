@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,14 +15,14 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transition implements Serializable {
-    @NotBlank
+    @NotBlank(message = "fromState cannot be null or blank")
     private String fromState;
 
-    @NotBlank
+    @NotBlank(message = "toState cannot be null or blank")
     private String toState;
 
-    @NotBlank
+    @NotBlank(message = "Transition event pattern cannot be null or blank")
     private String event;
 
-    private List<String> tasks;
+    private String task;
 }

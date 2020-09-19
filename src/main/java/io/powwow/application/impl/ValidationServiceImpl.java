@@ -18,77 +18,60 @@ public class ValidationServiceImpl implements ValidationService {
     @Override
     public ValidationDTO validate(StateMachineDef def) {
         ValidationDTO.Builder builder = ValidationDTO.builder();
-        validateFsmDef(builder, def);
         validateTransitions(builder, def);
         return builder.build();
     }
 
-    private void validateFsmDef(ValidationDTO.Builder builder, StateMachineDef def) {
-        if (def.getName() == null || def.getName().isBlank()) {
-            builder.reason("State machine name cannot be null or blank");
-        }
-
-        if (def.getAcceptingStates() == null || def.getAcceptingStates().isEmpty()) {
-            builder.reason("acceptingStates cannot be null or empty");
-        }
-
-        if (def.getStartingStates() == null || def.getStartingStates().isEmpty()) {
-            builder.reason("startingStates cannot be null or empty");
-        }
-    }
-
     private void validateTransitions(ValidationDTO.Builder builder, List<Transition> transitions, List<TaskDef> taskDefs) {
-        if (transitions == null || transitions.isEmpty()) {
-            builder.reason("Transitions cannot be null or empty");
-        }
-        if (transitions != null) {
-            final Set<String> definedTasks = taskDefs.stream()
-                    .map(TaskDef::getName)
-                    .collect(Collectors.toSet());
+        final Set<String> definedTasks = getDistinctTasks(taskDefs);
 
-            transitions.forEach(transition -> {
-                transition.getTasks().forEach(declaredTask -> {
-                    if (!definedTasks.contains(declaredTask)) {
-                        builder.reason("Undefined task '" + declaredTask + "'");
+        transitions.stream()
+                .filter(transition -> transition.getTask() != null) // task could be null
+                .forEach(transition -> {
+                    if (!definedTasks.contains(transition.getTask())) {
+                        builder.reason(String.format("Undefined task [%s] in transition[%s -> %s]", transition.getTask(), transition.getFromState(), transition.getToState()));
                     }
                 });
-            });
-
-        }
     }
 
+    private Set<String> getDistinctTasks(List<TaskDef> taskDefs) {
+        return taskDefs.stream()
+                .map(TaskDef::getName)
+                .collect(Collectors.toSet());
+    }
 
     private void validateTransitions(ValidationDTO.Builder builder, StateMachineDef def) {
-        if (def.getTasks() == null || def.getTasks().isEmpty()) {
-            builder.reason("tasks must not be null or empty");
-        }
 
+        // Validate that every task mentioned in the transitions are valid and defined
         validateTransitions(builder, def.getTransitions(), def.getTasks());
-
-        Optional<Transition> optionalFirstInvalidTransition = def.getTransitions().stream()
-                .filter(t -> isNullOrEmpty(t.getFromState()) || isNullOrEmpty(t.getToState()) || isNullOrEmpty(t.getEvent()))
-                .findFirst();
-
-        if (optionalFirstInvalidTransition.isPresent()) {
-            validateIndividualTransition(builder, optionalFirstInvalidTransition.get());
-            return;
-        }
 
         validateTransitionGraph(builder, def);
     }
 
+    /**
+     * Validate that the transition graph is valid. Make sure that every {@code startState} and {@code acceptingState}
+     * pair is reachable.
+     */
     private void validateTransitionGraph(ValidationDTO.Builder builder, StateMachineDef def) {
+
+        // Create adjacency list representation of transition graph
         Map<String, List<String>> g = toAdjacencyList(def.getTransitions());
 
-        // Lets test connectivity of each (start, terminal) state pair
+        // Ensure connectivity of each (start, terminal) state pair
         Set<String> allVisitedNodes = new HashSet<>();
         for (String startState : def.getStartingStates()) {
             for (String acceptState : def.getAcceptingStates()) {
-                validateIsConnected(builder, allVisitedNodes, g, startState, acceptState);
+                ensureConnected(builder, allVisitedNodes, g, startState, acceptState);
             }
         }
 
-        final List<String> nonVisitedStates = getDistinctStates(def)
+        // Ensure all nodes have been visited by now, if there are any nodes not visited by now
+        // its's probably an error, meaning an invalid transition graph
+        ensureAllNodesVisited(builder, getDistinctStates(def), allVisitedNodes);
+    }
+
+    private void ensureAllNodesVisited(ValidationDTO.Builder builder, Set<String> distinctNodes, Set<String> allVisitedNodes) {
+        final List<String> nonVisitedStates = distinctNodes
                 .stream()
                 .filter(state -> !allVisitedNodes.contains(state))
                 .collect(Collectors.toList());
@@ -106,7 +89,14 @@ public class ValidationServiceImpl implements ValidationService {
         return states;
     }
 
-    private void validateIsConnected(ValidationDTO.Builder builder, Set<String> allVisitedStates, Map<String, List<String>> g, String startState, String acceptState) {
+    /**
+     * @param builder          {@link ValidationDTO.Builder} instance to record any validation failures
+     * @param allVisitedStates global set of nodes visited so far
+     * @param g                transition graph
+     * @param startState       starting node
+     * @param acceptState      destination node, reaching this terminates the BFS
+     */
+    private void ensureConnected(ValidationDTO.Builder builder, Set<String> allVisitedStates, Map<String, List<String>> g, String startState, String acceptState) {
         Set<String> visited = new HashSet<>();
 
         Deque<String> q = new LinkedList<>();
@@ -140,24 +130,4 @@ public class ValidationServiceImpl implements ValidationService {
     private void addEdge(Map<String, List<String>> g, Transition transition) {
         g.computeIfAbsent(transition.getFromState(), k -> new ArrayList<>()).add(transition.getToState());
     }
-
-    private void validateIndividualTransition(ValidationDTO.Builder builder, Transition transition) {
-        if (isNullOrEmpty(transition.getFromState())) {
-            builder.reason("fromState of a transition must not be null or blank");
-        }
-
-        if (isNullOrEmpty(transition.getToState())) {
-            builder.reason("toState for a transition must not be null or blank");
-        }
-
-        if (isNullOrEmpty(transition.getEvent())) {
-            builder.reason("event for a transition must not be null or blank");
-        }
-    }
-
-    private static boolean isNullOrEmpty(String seq) {
-        return seq == null || seq.isBlank();
-    }
-
-
 }

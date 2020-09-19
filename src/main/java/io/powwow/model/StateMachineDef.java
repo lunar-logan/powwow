@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,28 +18,27 @@ import java.util.List;
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StateMachineDef implements Serializable {
+    @NotBlank(message = "Machine Id cannot be null or empty")
     private String id;
 
-    @NotBlank
     private String name;
 
     private String description;
-    private long version;
 
-    @NotNull
-    @NotEmpty
-    private List<String> startingStates;
+    private Long version;
 
-    @NotNull
-    @NotEmpty
-    private List<String> acceptingStates;
+    @NotEmpty(message = "Starting states must not be null or empty")
+    private List<@NotBlank String> startingStates;
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Accepting states must not be null or empty")
+    private List<@NotBlank String> acceptingStates;
+
+    @NotEmpty(message = "Transitions must not be null or empty")
+    @Valid
     private List<@Valid Transition> transitions;
 
-    @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Tasks must not be null or empty")
+    @Valid
     private List<@Valid TaskDef> tasks;
 
     private String createdBy;

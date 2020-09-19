@@ -7,49 +7,51 @@ Content-Type: application/json
     "name": "Order Fulfillment Workflow",
     "description": "Definition of complete shipping lifecycle",
     "acceptingStates": [
-      "delivered"
+      "Delivered"
     ],
     "startingStates": [
-      "init"
+      "Init"
     ],
     "transitions": [
       {
-        "fromState": "init",
-        "toState": "created",
-        "event": "auto",
-        "tasks": [
-          "CreateWarehouseShipmentTask",
-          "CreateCourierShipmentTask"
-        ]
+        "fromState": "Init",
+        "toState": "Created",
+        "event": "*",
+        "task": "CreateWareHouseTask"
       },
       {
-        "fromState": "created",
-        "toState": "packed",
+        "fromState": "Created",
+        "toState": "WarehouseNotified",
+        "event": "onWMSNotified",
+        "task": "CreateCourierShipmentTask"
+      },
+      {
+        "fromState": "WarehouseNotified",
+        "toState": "CourierNotified",
+        "event": "onUCINotified"
+      },
+      {
+        "fromState": "CourierNotified",
+        "toState": "Packed",
         "event": "onPacked",
-        "tasks": [
-          "NotifyUserTask"
-        ]
+        "task": "NotifyUserTask"
       },
       {
-        "fromState": "packed",
-        "toState": "shipped",
+        "fromState": "Packed",
+        "toState": "Shipped",
         "event": "onShipped",
-        "tasks": [
-          "NotifyUserTask"
-        ]
+        "tasks": "NotifyUserTask"
       },
       {
-        "fromState": "shipped",
-        "toState": "delivered",
+        "fromState": "Shipped",
+        "toState": "Delivered",
         "event": "onDelivered",
-        "tasks": [
-          "NotifyUserTask"
-        ]
+        "task": "NotifyUserTask"
       }
     ],
     "tasks": [
       {
-        "name": "CreateWarehouseShipmentTask",
+        "name": "CreateWareHouseTask",
         "queueName": "wmsQueue",
         "eventMap": {
           "COMPLETED": ["auto"]

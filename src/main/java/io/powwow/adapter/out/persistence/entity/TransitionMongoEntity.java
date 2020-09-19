@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +15,5 @@ public class TransitionMongoEntity implements Serializable {
     private String fromState;
     private String toState;
     private String event;
-    private List<String> tasks;
+    private String task;
 }
