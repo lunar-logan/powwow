@@ -59,10 +59,9 @@ public class ValidationServiceImpl implements ValidationService {
 
         // Ensure connectivity of each (start, terminal) state pair
         Set<String> allVisitedNodes = new HashSet<>();
-        for (String startState : def.getStartingStates()) {
-            for (String acceptState : def.getAcceptingStates()) {
-                ensureConnected(builder, allVisitedNodes, g, startState, acceptState);
-            }
+        String startState = def.getStartingState();
+        for (String acceptState : def.getAcceptingStates()) {
+            ensureConnected(builder, allVisitedNodes, g, startState, acceptState);
         }
 
         // Ensure all nodes have been visited by now, if there are any nodes not visited by now

@@ -1,4 +1,4 @@
-package io.powwow.application.clusterlock;
+package io.powwow.clusterlock;
 
 import java.util.concurrent.TimeUnit;
 

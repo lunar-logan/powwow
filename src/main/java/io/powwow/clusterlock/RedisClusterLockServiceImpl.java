@@ -1,4 +1,4 @@
-package io.powwow.application.clusterlock;
+package io.powwow.clusterlock;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

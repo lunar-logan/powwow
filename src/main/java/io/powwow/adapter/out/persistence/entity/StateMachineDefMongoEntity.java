@@ -29,7 +29,7 @@ public class StateMachineDefMongoEntity implements Serializable {
     @Version
     private long version;
 
-    private List<String> startingStates;
+    private String startingState;
     private List<String> acceptingStates;
     private List<TaskDefMongoEntity> tasks;
     private List<TransitionMongoEntity> transitions;

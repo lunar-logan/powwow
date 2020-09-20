@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 
 @Document
@@ -37,6 +37,7 @@ public class ExecutionContextMongoEntity implements Serializable {
     private Long version;
 
     @CreatedDate
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    private Date created;
+
+    private Date updated;
 }

@@ -27,8 +27,8 @@ public class StateMachineDef implements Serializable {
 
     private Long version;
 
-    @NotEmpty(message = "Starting states must not be null or empty")
-    private List<@NotBlank String> startingStates;
+    @NotEmpty(message = "Starting states must not be null or blank")
+    private String startingState;
 
     @NotEmpty(message = "Accepting states must not be null or empty")
     private List<@NotBlank String> acceptingStates;

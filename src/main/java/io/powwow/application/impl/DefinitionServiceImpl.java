@@ -50,7 +50,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .version(savedEntity.getVersion())
                 .transitions(savedEntity.getTransitions().stream().map(this::toDomainModel).collect(Collectors.toList()))
                 .tasks(savedEntity.getTasks().stream().map(this::toDomainModel).collect(Collectors.toList()))
-                .startingStates(savedEntity.getStartingStates())
+                .startingState(savedEntity.getStartingState())
                 .acceptingStates(savedEntity.getAcceptingStates())
                 .createdBy(savedEntity.getCreatedBy())
                 .build();
@@ -95,7 +95,7 @@ public class DefinitionServiceImpl implements DefinitionService {
                 .id(fsmDef.getId())
                 .name(fsmDef.getName())
                 .description(fsmDef.getDescription())
-                .startingStates(fsmDef.getStartingStates())
+                .startingState(fsmDef.getStartingState())
                 .acceptingStates(fsmDef.getAcceptingStates())
                 .tasks(fsmDef.getTasks().stream().map(this::toEntity).collect(Collectors.toList()))
                 .transitions(fsmDef.getTransitions().stream().map(this::toEntity).collect(Collectors.toList()))

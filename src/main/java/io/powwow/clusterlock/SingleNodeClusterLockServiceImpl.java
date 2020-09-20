@@ -1,8 +1,7 @@
-package io.powwow.application.clusterlock;
+package io.powwow.clusterlock;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,7 +10,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
-@Service
+//@Profile({"dev"})
+//@Service
 @AllArgsConstructor
 public class SingleNodeClusterLockServiceImpl implements ClusterLockService {
     private final Map<String, Lock> lockMap;

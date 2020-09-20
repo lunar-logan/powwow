@@ -3,20 +3,18 @@ Content-Type: application/json
 
 {
   "stateMachineDef": {
-    "id": "ShippingWorkflowV1",
+    "id": "ShippingWorkflowV2",
     "name": "Order Fulfillment Workflow",
     "description": "Definition of complete shipping lifecycle",
     "acceptingStates": [
       "Delivered"
     ],
-    "startingStates": [
-      "Init"
-    ],
+    "startingState": "Init",
     "transitions": [
       {
         "fromState": "Init",
         "toState": "Created",
-        "event": "*",
+        "event": "auto",
         "task": "CreateWareHouseTask"
       },
       {
@@ -54,58 +52,37 @@ Content-Type: application/json
         "name": "CreateWareHouseTask",
         "queueName": "wmsQueue",
         "eventMap": {
-          "COMPLETED": ["auto"]
+          "COMPLETED": [
+            "auto"
+          ]
         }
       },
       {
         "name": "CreateCourierShipmentTask",
         "queueName": "uciQueue",
         "eventMap": {
-          "COMPLETED": ["auto"]
+          "COMPLETED": [
+            "auto"
+          ]
         }
       },
       {
         "name": "NotifyUserTask",
         "queueName": "umsQueue",
         "eventMap": {
-          "COMPLETED": ["auto"]
+          "COMPLETED": [
+            "auto"
+          ]
         }
       }
     ],
     "createdBy": "anurag.gautam@snapdeal.com"
   }
 }
-
 ###
-GET localhost:8080/fsm/5f62177bf5be930783891f3b
-
-###
-
-GET localhost:8080/fsm?name=Cancellation Workflow&name=Cancellation Workflow
-
-###
-POST localhost:8080/task/
+POST localhost:8080/fsm/ShippingWorkflowV2/start
 Content-Type: application/json
 
 {
-  "name": "CreatWarehouseOrder",
-  "queueName": "shipping_queue",
-  "inputParameters": {
-    "expectedDeliveryDate": "${root.order.edd}"
-  }
+  "correlationId": "1234"
 }
-
-###
-POST localhost:8080/task/
-Content-Type: application/json
-
-{
-  "name": "CancelWarehouseOrder",
-  "queueName": "shipping_queue",
-  "inputParameters": {
-    "expectedDeliveryDate": "${root.order.edd}"
-  }
-}
-
-###
-GET localhost:8080/task/CreatWarehouseOrder

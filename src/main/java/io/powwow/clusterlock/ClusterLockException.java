@@ -1,4 +1,4 @@
-package io.powwow.application.clusterlock;
+package io.powwow.clusterlock;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
