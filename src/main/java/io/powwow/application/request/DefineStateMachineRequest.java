@@ -1,4 +1,4 @@
-package io.powwow.adapter.in.web.request;
+package io.powwow.application.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.powwow.model.StateMachineDef;

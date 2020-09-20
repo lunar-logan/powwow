@@ -1,7 +1,7 @@
 package io.powwow.adapter.in.web;
 
-import io.powwow.adapter.in.web.request.StartStateMachineRequest;
 import io.powwow.application.ExecutionService;
+import io.powwow.application.request.StartStateMachineRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

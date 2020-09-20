@@ -1,8 +1,8 @@
 package io.powwow.adapter.in.web;
 
-import io.powwow.adapter.in.web.request.DefineStateMachineRequest;
-import io.powwow.adapter.in.web.request.SearchStateMachineDefRequest;
 import io.powwow.application.DefinitionService;
+import io.powwow.application.request.DefineStateMachineRequest;
+import io.powwow.application.request.SearchStateMachineDefRequest;
 import io.powwow.application.response.ServiceResponse;
 import io.powwow.model.StateMachineDef;
 import lombok.AllArgsConstructor;

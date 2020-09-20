@@ -1,6 +1,6 @@
 package io.powwow.application;
 
-import io.powwow.adapter.in.web.request.DefineStateMachineRequest;
+import io.powwow.application.request.DefineStateMachineRequest;
 import io.powwow.application.response.ServiceResponse;
 import io.powwow.model.StateMachineDef;
 

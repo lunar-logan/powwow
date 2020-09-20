@@ -1,6 +1,5 @@
 package io.powwow.application.impl;
 
-import io.powwow.adapter.in.web.request.DefineStateMachineRequest;
 import io.powwow.adapter.out.persistence.dao.StateMachineDefDao;
 import io.powwow.adapter.out.persistence.entity.StateMachineDefMongoEntity;
 import io.powwow.adapter.out.persistence.entity.TaskDefMongoEntity;
@@ -8,6 +7,7 @@ import io.powwow.adapter.out.persistence.entity.TransitionMongoEntity;
 import io.powwow.application.DefinitionService;
 import io.powwow.application.ValidationService;
 import io.powwow.application.dto.ValidationDTO;
+import io.powwow.application.request.DefineStateMachineRequest;
 import io.powwow.application.response.ServiceResponse;
 import io.powwow.model.*;
 import lombok.AllArgsConstructor;
