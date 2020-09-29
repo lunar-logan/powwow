@@ -1,2 +1,6 @@
 rootProject.name = 'Powwow'
+include 'core'
+include 'server'
+include 'persistence-rocksdb'
+include 'persistence-redis'
 

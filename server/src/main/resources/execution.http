@@ -1,0 +1,13 @@
+GET localhost:8080/execution/1
+Accept: application/json
+
+###
+POST localhost:8080/execution/1/event/apply
+Content-Type: application/json
+
+{
+  "event": "onFulfilled"
+}
+
+###
+GET localhost:8080/execution/

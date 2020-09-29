@@ -1,0 +1,70 @@
+GET localhost:8080/fsm/V1__OrderConsumptionFlow
+
+###
+
+POST localhost:8080/fsm/
+Content-Type: application/json
+
+{
+  "id": "V1__OrderConsumptionFlow",
+  "startingState": "Created",
+  "acceptingStates": [
+    "Fulfilled",
+    "Cancelled"
+  ],
+  "transitions": [
+    {
+      "fromState": "Created",
+      "toState": "OmsNotified",
+      "event": "onOmsNotified"
+    },
+    {
+      "fromState": "OmsNotified",
+      "toState": "UciNotified",
+      "event": "onUciNotified"
+    },
+    {
+      "fromState": "UciNotified",
+      "toState": "Packed",
+      "event": "onOrderPacked"
+    },
+    {
+      "fromState": "Packed",
+      "toState": "Shipped",
+      "event": "onShipped"
+    },
+    {
+      "fromState": "Shipped",
+      "toState": "OutForDelivery",
+      "event": "onOutForDelivery"
+    },
+    {
+      "fromState": "OutForDelivery",
+      "toState": "Delivered",
+      "event": "onDelivered"
+    },
+    {
+      "fromState": "Delivered",
+      "toState": "Fulfilled",
+      "event": "onFulfilled"
+    }
+  ],
+  "subscribers": [
+    {
+      "name": "OrderCreatedSubscriber",
+      "callbackUrl": "https://iitk.ac.in",
+      "state": "OmsNotified"
+    }
+  ]
+}
+
+###
+DELETE  localhost:8080/fsm/V1__OrderConsumptionFlow
+
+###
+POST localhost:8080/fsm/V1__OrderConsumptionFlow/start
+Content-Type: application/json
+
+{
+}
+### 17c28f70-1315-40bb-b8b0-70c3f34ce63a
